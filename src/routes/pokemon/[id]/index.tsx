@@ -8,7 +8,7 @@ export const usePokemonId = routeLoader$(({ params, fail }) => {
   if (isNaN(pokemonId)) return fail(400, {
     errorMessage: 'Estás confundido'
   });
-  if (pokemonId <= 0 || pokemonId > 1000) return fail(404, {
+  if (pokemonId <= 0 || pokemonId > 1281) return fail(404, {
     errorMessage: 'No se encuentra en la PokeDex'
   });
 
@@ -20,7 +20,7 @@ export default component$(() => {
   const result = usePokemonId();
 
 
-  if ('failed' in result.value) return (<>
+  if ('errorMessage' in result.value) return (<>
     <p>{result.value.errorMessage}</p>
   </>);
 
