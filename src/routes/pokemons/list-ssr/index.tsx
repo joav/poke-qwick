@@ -42,7 +42,7 @@ export default component$(() => {
         }
       </div>
     </>
-  )
+  );
 });
 
 export const head: DocumentHead = {
