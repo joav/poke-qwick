@@ -4,7 +4,7 @@ import { PokemonImage } from '~/components/pokemons/pokemons-image';
 import { PokemonListContext } from '~/context';
 import { getSmallPokemons } from '~/helpers/get-small-pokemons';
 
-export const POKEMON_LIMIT = 30;
+const POKEMON_LIMIT = 30;
 
 export default component$(() => {
   const pokemonState = useContext(PokemonListContext);
