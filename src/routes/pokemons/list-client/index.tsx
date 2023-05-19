@@ -1,4 +1,4 @@
-import { component$, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, useOnDocument, useStore, useTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { PokemonImage } from '~/components/pokemons/pokemons-image';
 import { getSmallPokemons } from '~/helpers/get-small-pokemons';
@@ -7,26 +7,41 @@ import type { SmallPokemon } from '~/interfaces';
 interface PokemonState {
   currentPage: number;
   pokemons: SmallPokemon[];
+  loadingPage: boolean;
 }
+
+export const POKEMON_LIMIT = 30;
 
 export default component$(() => {
   const pokemonState = useStore<PokemonState>({
     currentPage: 0,
-    pokemons: []
+    pokemons: [],
+    loadingPage: false
   });
 
   useTask$(async ({ track }) => {
     track(() => pokemonState.currentPage);
 
-    const pokemons = await getSmallPokemons(pokemonState.currentPage * 10);
+    const pokemons = await getSmallPokemons(pokemonState.currentPage * POKEMON_LIMIT, POKEMON_LIMIT);
     pokemonState.pokemons = [...pokemonState.pokemons, ...pokemons];
+    pokemonState.loadingPage = false;
   });
+
+  useOnDocument('scroll', $(() => {
+    const maxScroll = document.body.scrollHeight;
+    const currentScroll = window.scrollY + window.innerHeight;
+
+    if (!pokemonState.loadingPage && currentScroll + 200 >= maxScroll) {
+      pokemonState.loadingPage = true;
+      pokemonState.currentPage++;
+    }
+  }));
 
   return (
     <>
       <div class="flex flex-col">
         <span class="my-5 text-5xl">Status</span>
-        <span>Página actual: {pokemonState.currentPage}</span>
+        <span style={{ 'position': 'fixed' }}>Página actual: {pokemonState.currentPage}</span>
         <span>Está cargando: </span>
       </div>
 
@@ -35,7 +50,7 @@ export default component$(() => {
         <button onClick$={() => pokemonState.currentPage++} class="btn btn-primary mr-2">Siguientes</button>
       </div>
 
-      <div class="grid grid-cols-6 mt-5">
+      <div class="grid sm:grid-cols-2 md:grid-cols-5 xl:grid-cols-7 mt-5">
         {
           pokemonState.pokemons.map(({ name, id }) => (
             <div key={name} class="m-5 flex flex-col justify-center items-center">
