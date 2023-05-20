@@ -12,7 +12,7 @@ export const usePokemonGame = () => {
     pokemonGame.pokemonId += value;
   });
 
-  const spin = $(() => pokemonGame.isBackImage = !pokemonGame.isBackImage);
+  const flip = $(() => pokemonGame.isBackImage = !pokemonGame.isBackImage);
   const toggleVisible = $(() => pokemonGame.isPokemonVisible = !pokemonGame.isPokemonVisible);
 
   return {
@@ -21,7 +21,7 @@ export const usePokemonGame = () => {
     isPokemonVisible: useComputed$(() => pokemonGame.isPokemonVisible),
     nextPokemon: $(() => changePokemonId(1)),
     prevPokemon: $(() => changePokemonId(-1)),
-    spin,
+    flip,
     toggleVisible,
   };
 };

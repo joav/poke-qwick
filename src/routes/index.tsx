@@ -12,7 +12,7 @@ export default component$(() => {
     isBackImage,
     prevPokemon,
     nextPokemon,
-    spin,
+    flip,
     toggleVisible
   } = usePokemonGame();
 
@@ -33,7 +33,7 @@ export default component$(() => {
       <div class="mt-2">
         <button onClick$={prevPokemon} class="btn btn-primary mr-2">Anterior</button>
         <button onClick$={nextPokemon} class="btn btn-primary mr-2">Siguiente</button>
-        <button onClick$={spin} class="btn btn-primary mr-2">Voltear</button>
+        <button onClick$={flip} class="btn btn-primary mr-2">Voltear</button>
         <button onClick$={toggleVisible} class="btn btn-primary">Revelar</button>
       </div>
     </>
