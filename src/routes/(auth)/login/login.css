@@ -11,7 +11,7 @@ button {
 }
 
 code {
-  @apply block whitespace-pre overflow-scroll text-sm w-80;
+  @apply block whitespace-pre overflow-auto text-sm w-80;
 }
 
 .login-form {
