@@ -1,7 +1,8 @@
-import { $, component$, useComputed$, useStore } from '@builder.io/qwik';
+import { $, component$, useComputed$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { type DocumentHead, Link, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { PokemonImage } from '~/components/pokemons/pokemons-image';
 import { Modal } from '~/components/shared';
+import { getChatGPTResponse } from '~/helpers/get-chat-gpt-response';
 import { getSmallPokemons } from '~/helpers/get-small-pokemons';
 import type { SmallPokemon } from '~/interfaces';
 
@@ -23,7 +24,8 @@ export default component$(() => {
   const modal = useStore({
     visible: false,
     id: 0,
-    name: ''
+    name: '',
+    openAIResponse: ''
   });
 
   const showModal = $((id: string, name: string) => {
@@ -34,6 +36,15 @@ export default component$(() => {
 
   const closeModal = $(() => {
     modal.visible = false;
+  });
+
+  useVisibleTask$(async ({ track }) => {
+    track(() => modal.name);
+    modal.openAIResponse = '';
+
+    if (modal.name) {
+      modal.openAIResponse = await getChatGPTResponse(modal.name);
+    }
   });
 
   return (
@@ -66,7 +77,7 @@ export default component$(() => {
         </div>
         <div q:slot='content' class="flex flex-col justify-center items-center">
           <PokemonImage id={modal.id} />
-          <span>Preguntadole a ChatGPT</span>
+          <span>{modal.openAIResponse || 'Preguntadole a ChatGPT'}</span>
         </div>
       </Modal>
     </>
