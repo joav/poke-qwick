@@ -7,7 +7,7 @@ export const useCheckAuthCookie = routeLoader$(({ cookie, redirect }) => {
 
   if (jwt?.value !== 'my_jwt') return redirect(302, '/login') && false;
 
-  console.log({ jwt });
+  return true;
 });
 
 export default component$(() => {
